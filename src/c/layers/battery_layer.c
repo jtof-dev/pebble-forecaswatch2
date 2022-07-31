@@ -76,10 +76,14 @@ static void battery_update_proc(Layer *layer, GContext *ctx) {
 
 void battery_layer_create(Layer* parent_layer, GRect frame) {
     // battery text needs to be ABOVE calendar status
+    // PBL_RECT 144x168
     //#define CALENDAR_STATUS_HEIGHT 13
+    //#define MONTH_FONT_OFFSET 7
     // Set up battery text text layer, mirror month (font) settings
-    //s_battery_text_layer = text_layer_create(GRect(0, -MONTH_FONT_OFFSET, w, 25));  // TODO use frame and do math on it
-    s_battery_text_layer = text_layer_create(GRect(0, 0, 25, 25));
+    //s_battery_text_layer = text_layer_create(GRect(frame.origin.x - 30, frame.origin.y - 8, 30, 13));  // matches level of month ad year too close to year
+    //s_battery_text_layer = text_layer_create(GRect(frame.origin.x - 30, frame.origin.y - 8, 30, 25));  // WORKS matches level of month and year
+    //s_battery_text_layer = text_layer_create(GRect(frame.origin.x - 30, frame.origin.y - 8, 30, 15));  // bottom of text truncated -  matches level of month and year
+    s_battery_text_layer = text_layer_create(GRect(frame.origin.x - 30, frame.origin.y - 8, 30, 20));  // WORKS matches level of month and year
     text_layer_set_background_color(s_battery_text_layer, GColorClear);
     //text_layer_set_text_alignment(s_battery_text_layer, GTextAlignmentCenter);
     text_layer_set_text_alignment(s_battery_text_layer, GTextAlignmentRight);
@@ -91,7 +95,8 @@ void battery_layer_create(Layer* parent_layer, GRect frame) {
     battery_state_service_subscribe(battery_state_handler);
     layer_add_child(parent_layer, s_battery_layer);
 
-    layer_add_child(parent_layer, s_battery_text_layer);
+    layer_add_child(parent_layer, text_layer_get_layer(s_battery_text_layer));
+    //layer_add_child(window_get_root_layer(window), text_layer_get_layer(battery_layer));
 }
 
 void battery_layer_refresh() {

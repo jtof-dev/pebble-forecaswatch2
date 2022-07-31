@@ -67,9 +67,15 @@ void calendar_status_layer_create(Layer* parent_layer, GRect frame) {
 
 
     // Set up month text layer
+#define OPT_BATTERY_TEXT
+#ifdef OPT_BATTERY_TEXT
+    s_calendar_month_layer = text_layer_create(GRect(30, -MONTH_FONT_OFFSET, w, 25));
+    text_layer_set_text_alignment(s_calendar_month_layer, GTextAlignmentLeft);
+#else
     s_calendar_month_layer = text_layer_create(GRect(0, -MONTH_FONT_OFFSET, w, 25));
-    text_layer_set_background_color(s_calendar_month_layer, GColorClear);
     text_layer_set_text_alignment(s_calendar_month_layer, GTextAlignmentCenter);
+#endif  // OPT_BATTERY_TEXT
+    text_layer_set_background_color(s_calendar_month_layer, GColorClear);
     text_layer_set_text_color(s_calendar_month_layer, GColorWhite);
     text_layer_set_font(s_calendar_month_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 
