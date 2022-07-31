@@ -11,7 +11,6 @@
 
 static Layer *s_calendar_status_layer;
 static TextLayer *s_calendar_month_layer;
-static TextLayer *s_calendar_month_layer;
 static GBitmap *s_mute_bitmap;
 static GBitmap *s_bt_bitmap;
 static GBitmap *s_bt_disconnect_bitmap;
@@ -84,7 +83,7 @@ void calendar_status_layer_create(Layer* parent_layer, GRect frame) {
     layer_add_child(s_calendar_status_layer, bitmap_layer_get_layer(s_bt_bitmap_layer));
     layer_add_child(s_calendar_status_layer, bitmap_layer_get_layer(s_bt_disconnect_bitmap_layer));
     layer_add_child(s_calendar_status_layer, text_layer_get_layer(s_calendar_month_layer));
-    battery_layer_create(s_calendar_status_layer, GRect(w - BATTERY_W - PADDING, 1, BATTERY_W, BATTERY_H));
+    battery_layer_create(s_calendar_status_layer, GRect(w - BATTERY_W - PADDING, 1, BATTERY_W, BATTERY_H));  // FIXME where is the destroy call?
     layer_add_child(parent_layer, s_calendar_status_layer);
 }
 
@@ -132,6 +131,8 @@ void calendar_status_layer_destroy() {
     gbitmap_destroy(s_mute_bitmap);
     gbitmap_destroy(s_bt_bitmap);
     gbitmap_destroy(s_bt_disconnect_bitmap);
+    // FIXME where is the battery_layer_destroy(); call?
+    battery_layer_destroy();
     bitmap_layer_destroy(s_mute_bitmap_layer);
     bitmap_layer_destroy(s_bt_bitmap_layer);
     bitmap_layer_destroy(s_bt_disconnect_bitmap_layer);
