@@ -11,7 +11,6 @@
 
 static Layer *s_calendar_status_layer;
 static TextLayer *s_calendar_month_layer;
-static TextLayer *s_calendar_month_layer;
 static GBitmap *s_mute_bitmap;
 static GBitmap *s_bt_bitmap;
 static GBitmap *s_bt_disconnect_bitmap;
@@ -68,9 +67,15 @@ void calendar_status_layer_create(Layer* parent_layer, GRect frame) {
 
 
     // Set up month text layer
+#define OPT_BATTERY_TEXT
+#ifdef OPT_BATTERY_TEXT
+    s_calendar_month_layer = text_layer_create(GRect(30, -MONTH_FONT_OFFSET, w, 25));
+    text_layer_set_text_alignment(s_calendar_month_layer, GTextAlignmentLeft);
+#else
     s_calendar_month_layer = text_layer_create(GRect(0, -MONTH_FONT_OFFSET, w, 25));
-    text_layer_set_background_color(s_calendar_month_layer, GColorClear);
     text_layer_set_text_alignment(s_calendar_month_layer, GTextAlignmentCenter);
+#endif  // OPT_BATTERY_TEXT
+    text_layer_set_background_color(s_calendar_month_layer, GColorClear);
     text_layer_set_text_color(s_calendar_month_layer, GColorWhite);
     text_layer_set_font(s_calendar_month_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 
@@ -84,7 +89,7 @@ void calendar_status_layer_create(Layer* parent_layer, GRect frame) {
     layer_add_child(s_calendar_status_layer, bitmap_layer_get_layer(s_bt_bitmap_layer));
     layer_add_child(s_calendar_status_layer, bitmap_layer_get_layer(s_bt_disconnect_bitmap_layer));
     layer_add_child(s_calendar_status_layer, text_layer_get_layer(s_calendar_month_layer));
-    battery_layer_create(s_calendar_status_layer, GRect(w - BATTERY_W - PADDING, 1, BATTERY_W, BATTERY_H));
+    battery_layer_create(s_calendar_status_layer, GRect(w - BATTERY_W - PADDING, 1, BATTERY_W, BATTERY_H));  // FIXME where is the destroy call?
     layer_add_child(parent_layer, s_calendar_status_layer);
 }
 
@@ -132,6 +137,8 @@ void calendar_status_layer_destroy() {
     gbitmap_destroy(s_mute_bitmap);
     gbitmap_destroy(s_bt_bitmap);
     gbitmap_destroy(s_bt_disconnect_bitmap);
+    // FIXME where is the battery_layer_destroy(); call?
+    battery_layer_destroy();
     bitmap_layer_destroy(s_mute_bitmap_layer);
     bitmap_layer_destroy(s_bt_bitmap_layer);
     bitmap_layer_destroy(s_bt_disconnect_bitmap_layer);
