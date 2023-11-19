@@ -115,7 +115,7 @@ WeatherProvider.prototype.withGpsCoordinates = function(callback) {
     // callback(lattitude, longtitude)
     var options = {
         enableHighAccuracy: true,
-        maximumAge: 10000,
+        maximumAge: 10000,  // used cached GPS location if unable to get live location
         timeout: 10000
     };
     function success(pos) {
