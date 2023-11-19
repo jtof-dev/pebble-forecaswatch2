@@ -175,6 +175,8 @@ function roundDownMinutes(date, minuteMod) {
 function needRefresh() {
     // If the weather has never been fetched
     var lastFetchSuccessString = localStorage.getItem('lastFetchSuccess');
+    var refresh_interval_in_minutes = 30; // TODO make a config option
+    
     if (lastFetchSuccessString === null) {
         return true;
     }
@@ -183,6 +185,6 @@ function needRefresh() {
         // Just covering all my bases
         return true;
     }
-    // If the most recent fetch is more than 30 minutes old
-    return (Date.now() - roundDownMinutes(new Date(lastFetchSuccess.time), 30) > 1000 * 60 * 30);
+    // If the most recent fetch is more than refresh_interval_in_minutes minutes old
+    return (Date.now() - roundDownMinutes(new Date(lastFetchSuccess.time), refresh_interval_in_minutes) > 1000 * 60 * refresh_interval_in_minutes);
 }
