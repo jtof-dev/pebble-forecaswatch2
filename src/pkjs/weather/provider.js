@@ -115,8 +115,8 @@ WeatherProvider.prototype.withGpsCoordinates = function(callback) {
     // callback(lattitude, longtitude)
     var options = {
         enableHighAccuracy: true,
-        maximumAge: 10000,  // used cached GPS location if unable to get live location
-        timeout: 10000
+        maximumAge: Infinity,  // Infinity means used cached GPS location if unable to get live location
+        timeout: 10000  // 10 seconds
     };
     function success(pos) {
         console.log('FOUND LOCATION: lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude);
