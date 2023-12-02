@@ -115,7 +115,7 @@ WeatherProvider.prototype.withGpsCoordinates = function(callback) {
     // callback(lattitude, longtitude)
     var options = {
         enableHighAccuracy: true,
-        maximumAge: Infinity,  // Infinity means used cached GPS location if unable to get live location
+        maximumAge: 10000,  // 10 seconds - Infinity does not work (android, iOS untested) Infinity means used cached GPS location if unable to get live location
         timeout: 10000  // 10 seconds
     };
     function success(pos) {
