@@ -1,4 +1,5 @@
 const SunCalc = require('suncalc')
+var cache_gps_location = true;  // TODO make this is a config option
 
 function request(url, type, callback) {
     var xhr = new XMLHttpRequest();
@@ -111,6 +112,17 @@ WeatherProvider.prototype.withGeocodeCoordinates = function(callback) {
 
 }
 
+// takes in a dictionary of latitude and longitude
+function gps_cache_location_save(cached_location) {
+    // TODO add range/boundary box check, to avoid saving EVERY time when only a few few meters/metres diffence
+    localStorage.setItem('gps_cached_location', JSON.stringify(cached_location));
+}
+// returns a dictionary of latitude and longitude
+function gps_cache_location_load() {
+    var cached_location = localStorage.getItem('gps_cached_location');
+    return cached_location;  // TODO ensure both latitude and longitude present and valid?
+}
+
 WeatherProvider.prototype.withGpsCoordinates = function(callback) {
     // callback(lattitude, longtitude)
     var options = {
@@ -120,10 +132,24 @@ WeatherProvider.prototype.withGpsCoordinates = function(callback) {
     };
     function success(pos) {
         console.log('FOUND LOCATION: lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude);
+        if (cache_gps_location) {
+            gps_cache_location_save({"latitude": pos.coords.latitude, "longitude": pos.coords.longitude});  // care about age? Could save all of pos or pos.coords?
+        }
         callback(pos.coords.latitude, pos.coords.longitude);
     }
     function error(err) {
         console.log('location error (' + err.code + '): ' + err.message);
+        if (cache_gps_location) {
+            cached_location = gps_cache_location_load();
+            if (cached_location == null) {
+                console.log('cache location lookup also failed');
+            }
+            else {
+                // assume contains something usable and valid
+                console.log('Using cached LOCATION: lat= ' + (cached_location.latitude + ' lon= ' + cached_location.longitude);
+                callback(cached_location.latitude, cached_location.longitude);
+            }
+        }
     }
     navigator.geolocation.getCurrentPosition(success, error, options);
 }
