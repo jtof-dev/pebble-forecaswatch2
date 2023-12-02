@@ -146,7 +146,7 @@ WeatherProvider.prototype.withGpsCoordinates = function(callback) {
             }
             else {
                 // assume contains something usable and valid
-                console.log('Using cached LOCATION: lat= ' + (cached_location.latitude + ' lon= ' + cached_location.longitude);
+                console.log('Using cached LOCATION: lat= ' + cached_location.latitude + ' lon= ' + cached_location.longitude);
                 callback(cached_location.latitude, cached_location.longitude);
             }
         }
