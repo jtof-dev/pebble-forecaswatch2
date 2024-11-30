@@ -80,7 +80,6 @@ function sendClaySettings() {
     CLAY_COLOR_TIME: app.settings.hasOwnProperty("colorTime")
       ? app.settings.colorTime
       : 16777215,
-    CLAY_SHOW_BATTERY_PERCENT: app.settings.battPercent, // Add this line
   };
   Pebble.sendAppMessage(
     payload,
@@ -89,7 +88,7 @@ function sendClaySettings() {
     },
     function (e) {
       console.log("Message failed: " + JSON.stringify(e));
-    }
+    },
   );
 }
 
@@ -171,7 +170,7 @@ function fetch(provider) {
     function () {
       // Failure
       console.log("[!] Provider failed to update weather");
-    }
+    },
   );
 }
 
@@ -208,7 +207,7 @@ function needRefresh() {
     Date.now() -
       roundDownMinutes(
         new Date(lastFetchSuccess.time),
-        refresh_interval_in_minutes
+        refresh_interval_in_minutes,
       ) >
     1000 * 60 * refresh_interval_in_minutes
   );

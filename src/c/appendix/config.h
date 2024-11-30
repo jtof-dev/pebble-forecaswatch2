@@ -13,6 +13,7 @@ typedef struct {
     bool show_bt_disconnect;
     bool vibe;
     bool show_am_pm;
+    bool show_battery_percent;
     int16_t time_font;
     GColor color_today;
     GColor color_saturday;
